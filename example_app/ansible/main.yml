@@ -4,8 +4,8 @@
   tasks: 
       - name: Show current location 
         shell: pwd
-    # - name: Print text 
-    #   template: 
-    #     src: ./{{ project }}/terraform/locals.j2
-    #     dest: ./{{ project }}/terraform/{{ env }}/{{ app_type }}/locals.tf 
+    - name: Print text 
+      template: 
+        src: ../terraform/locals.j2
+        dest: ../terraform/{{ env }}/{{ app_type }}/locals.tf 
       
