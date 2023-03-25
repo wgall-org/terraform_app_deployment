@@ -2,8 +2,6 @@
   gather_facts: true
 
   tasks: 
-      - name: Show current location 
-        shell: pwd
     - name: Print text 
       template: 
         src: ../terraform/locals.j2
