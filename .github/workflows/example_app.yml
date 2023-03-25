@@ -89,7 +89,7 @@ jobs:
         working-directory: ${{inputs.image }}/terraform/${{ inputs.environment }}/frontend
         run: | 
           export ANSIBLE_HOST_KEY_CHECKING=False
-          sed -i "s/storage/${{ env.reponame }}/" main.tf
+          sed -i "s/storage/${{ env.reponame }}-${{ inputs.tag }}/" main.tf
           terraform init -force-copy
           terraform apply --auto-approve
       - name: Deploy Backend part of application 

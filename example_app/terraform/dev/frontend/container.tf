@@ -8,7 +8,7 @@ resource "google_cloud_run_service" "container" {
         image = "gcr.io/${local.projectid}/${local.image}:${local.tag}"
         ports {
           protocol       = "TCP"
-          container_port = 80
+          container_port = 3000
         }
       }
     }
