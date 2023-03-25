@@ -5,10 +5,5 @@ terraform {
       version = "4.26.0"
     }
   }
-  backend "gcs" {
-
-      bucket = local.project
-      prefix = "frontend/"
-  }
 }
 
