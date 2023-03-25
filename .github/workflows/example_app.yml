@@ -1,0 +1,30 @@
+name: Deploy example app
+
+on: 
+  workflow_dispatch:
+    inputs:
+      environmnet:
+        description: 'Deployment environment'
+        required: true 
+        default: 'dev'
+        type: choice 
+        options:
+          - dev 
+          - stage 
+          - prod
+      image: 
+        description: 'Image name'
+        type: string
+        required: true 
+        default: 'image'
+      tag: 
+        description: 'Image tag'
+        type: string 
+        required: false
+        default: 'dev'
+jobs:
+  test_inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3 
+      - run: echo "${{ inputs.environment }} ${{ inputs.image }} ${{ inputs.tag }}" 
