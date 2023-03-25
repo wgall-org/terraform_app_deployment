@@ -68,6 +68,7 @@ jobs:
             -e tag=${{ inputs.tag }}
             -e app_type=${{ inputs.app_type }}
             -e env=${{ inputs.environment }}
+            -e image=${{ inputs.image }}
       - working-directory: example_app/ansible
         run: | 
           echo "${{ secrets.VM_KEY }}" > inventory/key
