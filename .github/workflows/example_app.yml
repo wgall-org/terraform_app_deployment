@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Correct project name
-        run: echo "reponame=$(echo ${{ github.event.repository.name }} | tr _ - )" >> $GITHUB_ENV
+        run: echo "reponame=$(echo ${{ inputs.image }} | tr _ - )" >> $GITHUB_ENV
       - uses: actions/checkout@v3 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
