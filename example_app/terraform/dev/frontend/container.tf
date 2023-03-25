@@ -1,5 +1,5 @@
 resource "google_cloud_run_service" "container" {
-  name     = var.project
+  name     = local.project
   location = local.region
 
   template {
