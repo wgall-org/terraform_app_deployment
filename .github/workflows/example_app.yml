@@ -33,4 +33,4 @@ jobs:
           chmod 600 inventory/key
       - name: Run playbook 
         working-directory: example_app/ansible 
-        run: ansible-playbook main.yml -i inventory
+        run: ansible-playbook main.yml -i ./inventory
