@@ -7,7 +7,7 @@ terraform {
   }
   backend "gcs" {
 
-      bucket = local.project
+      bucket = "storage"
       prefix = "frontend/"
   }
 }
