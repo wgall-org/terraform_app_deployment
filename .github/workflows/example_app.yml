@@ -51,4 +51,4 @@ jobs:
         working-directory: example_app/ansible 
         run: | 
           export ANSIBLE_HOST_KEY_CHECKING=False
-          cat 
+          cat  ../terraform/${{ inputs.environment }}/${{ inputs.app_type }}/locals.tf
