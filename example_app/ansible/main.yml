@@ -2,8 +2,10 @@
   gather_facts: true
 
   tasks: 
-    - name: Print text 
-      template: 
-        src: ./{{ project }}/terraform/locals.j2
-        dest: ./{{ project }}/terraform/{{ env }}/{{ app_type }}/locals.tf 
+      - name: Show current location 
+        shell: pwd
+    # - name: Print text 
+    #   template: 
+    #     src: ./{{ project }}/terraform/locals.j2
+    #     dest: ./{{ project }}/terraform/{{ env }}/{{ app_type }}/locals.tf 
       
