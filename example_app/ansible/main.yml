@@ -1,6 +1,9 @@
-- hosts: dev
+- hosts: localhost
   gather_facts: true
 
   tasks: 
     - name: Print text 
-      shell: echo text
+      template: 
+        src: ./${{ project }}/terraform/locals.j2
+        dest: ./${{ project }}/terraform/{{ env }}/{{ app_type }}/locals.tf 
+      

@@ -3,7 +3,7 @@ name: Deploy example app
 on: 
   workflow_dispatch:
     inputs:
-      environmemt:
+      environment:
         description: 'Deployment environment'
         required: true 
         default: 'dev'
@@ -17,6 +17,14 @@ on:
         type: string
         required: true 
         default: 'image'
+      app_type: 
+        description: 'Type of application'
+        required: true
+        type: choice 
+        options:
+          - dev 
+          - stage 
+          - prod
       tag: 
         description: 'Image tag'
         type: string 
@@ -27,6 +35,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3 
+      - uses: dawidd6/action-ansible-playbook@v2
+        with:
+          playbook: ./${{ inputs.image }}/ansible/main.yml
+          options: |
+            -e project=${{ inputs.image }}
+            -e region=${{ inputs.region }}
+            -e app_type=${{ inputs.app_type }}
+            -e env=${{ inputs.environment }}
       - working-directory: example_app/ansible
         run: | 
           echo "${{ secrets.VM_KEY }}" > inventory/key
@@ -35,4 +51,4 @@ jobs:
         working-directory: example_app/ansible 
         run: | 
           export ANSIBLE_HOST_KEY_CHECKING=False
-          ansible-playbook main.yml -i ./inventory
+          cat 
