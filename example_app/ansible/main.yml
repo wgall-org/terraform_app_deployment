@@ -1,6 +1,6 @@
-- hosts: "dev"
+- hosts: dev
   gather_facts: true
 
-- tasks: 
+  tasks: 
     - name: Print text 
       shell: echo text
