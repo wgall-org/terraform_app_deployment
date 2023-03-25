@@ -1,4 +1,4 @@
-- hosts: dev 
+- hosts: "dev" 
   gather_facts: false 
 
 - tasks: 
