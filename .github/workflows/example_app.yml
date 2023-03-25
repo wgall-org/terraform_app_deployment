@@ -17,6 +17,10 @@ on:
         type: string
         required: true 
         default: 'image'
+      region: 
+        description: 'GCP region'
+        required: true 
+        type: string
       app_type: 
         description: 'Type of application'
         required: true
