@@ -22,9 +22,8 @@ on:
         required: true
         type: choice 
         options:
-          - dev 
-          - stage 
-          - prod
+          - frontend
+          - backend
       tag: 
         description: 'Image tag'
         type: string 
