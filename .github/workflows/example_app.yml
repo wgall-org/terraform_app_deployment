@@ -66,6 +66,7 @@ jobs:
             -e project=${{ env.reponame }}-${{ inputs.tag }}
             -e region=${{ inputs.region }}
             -e tag=${{ inputs.tag }}
+            -e projectid=${{ inputs.projectid }}
             -e app_type=${{ inputs.app_type }}
             -e env=${{ inputs.environment }}
             -e image=${{ inputs.image }}
