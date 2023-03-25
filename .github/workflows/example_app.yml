@@ -33,4 +33,6 @@ jobs:
           chmod 600 inventory/key
       - name: Run playbook 
         working-directory: example_app/ansible 
-        run: ansible-playbook main.yml -i ./inventory
+        run: | 
+          export ANSIBLE_HOST_KEY_CHECKING=False
+          ansible-playbook main.yml -i ./inventory
