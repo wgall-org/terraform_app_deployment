@@ -1,7 +1,7 @@
 resource "google_compute_backend_service" "backend" {
   provider                        = google-beta
   name                            = local.project
-  project                         = local.projetid
+  project                         = local.projectid
   enable_cdn                      = true
   connection_draining_timeout_sec = 10
   protocol                        = "HTTPS"
