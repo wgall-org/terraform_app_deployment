@@ -12,7 +12,7 @@ on:
           - dev 
           - stage 
           - prod
-      project: 
+      image: 
         description: 'Project name'
         type: string
         required: true 
