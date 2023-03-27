@@ -4,4 +4,6 @@ services:
   nextjs:
     image: ${IMAGE}:${TAG}
     container_name: node-${PROJECT}
-
+    environment:
+      - VIRTUAL_HOST=${PROJECT}.${TAG}.gallit.net 
+      - VIRTUAL_PORT=3000
