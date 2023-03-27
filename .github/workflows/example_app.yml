@@ -80,7 +80,7 @@ jobs:
       - name: generate locals.tf 
         working-directory: ./python 
         run: |
-          python3 main.py '${{ inputs.local_tf }}'
+          python3 main.py '${{ inputs.local_tf }}' '${{ inputs.env-content}}'
       - name: Check if backend is present  
         run: echo "is_present=$(gcloud run services list | grep ${{ env.reponame }}-${{ inputs.environment }} | wc -l)" >> $GITHUB_ENV 
       - name: Create Bucket for terraform backend
