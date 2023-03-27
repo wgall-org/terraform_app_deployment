@@ -88,17 +88,19 @@ jobs:
       - name: Create Bucket for terraform backend
         working-directory: ./backend-storage
         run: |
-          echo '${{ inputs.local_tf }}' > locals.tf
-          terraform init 
-          terraform apply --auto-approve
-      - name: Deploy frontend part of application 
-        working-directory: ${{inputs.project-name }}/terraform/${{ inputs.environment }}
-        run: | 
-          export ANSIBLE_HOST_KEY_CHECKING=False
-          echo '${{ inputs.local_tf }}' > locals.tf
-          sed -i "s/storage/${{ env.reponame }}-${{ inputs.tag }}/" main.tf
-          terraform init -force-copy
-          terraform apply --auto-approve
+          echo '${{ inputs.local_tf }}' >> locals.tf
+          echo } >> locals.tf
+          cat locals.tf
+      #     terraform init 
+      #     terraform apply --auto-approve
+      # - name: Deploy frontend part of application 
+      #   working-directory: ${{inputs.project-name }}/terraform/${{ inputs.environment }}
+      #   run: | 
+      #     export ANSIBLE_HOST_KEY_CHECKING=False
+      #     echo '${{ inputs.local_tf }}' > locals.tf
+      #     sed -i "s/storage/${{ env.reponame }}-${{ inputs.tag }}/" main.tf
+      #     terraform init -force-copy
+      #     terraform apply --auto-approve
 
 
      
