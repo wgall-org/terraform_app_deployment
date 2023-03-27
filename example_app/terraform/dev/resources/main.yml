@@ -7,11 +7,21 @@
     systemd:
       state: started
       name: docker 
-      enabled: true 
+      enabled: true
+  - name: Create project directory
+    shell: mkdir {{ project }}
+    ignore_errors: true
+  - name: Copy resources to directory
+    copy:
+      src: "./{{ item }}"
+      dest: "{{ project }}/{{ item }}"
+    with_items:
+      - docker-compose.yml
+      - .env
   - name: Deploy application on docker 
-    docker_compose:
-      env_file: .env 
-      project_src: .
+    community.docker.docker_compose:
+      project_src: "{{ project }}"
+  
       
       
 
