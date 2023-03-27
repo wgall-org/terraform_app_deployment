@@ -24,34 +24,6 @@ on:
           - dev 
           - stage 
           - prod
-      # front_image: 
-      #   description: 'Frontend image name'
-      #   type: string
-      #   required: true 
-      #   default: 'example_app'
-      # back_image:
-      #   description: 'Backend image name'
-      #   type: string
-      #   required: true
-      
-      # projectid: 
-      #   description: 'GCP projectid'
-      #   type: string
-      #   required: true 
-      #   default: 'example_app'
-      # region: 
-      #   description: 'GCP region'
-      #   required: true 
-      #   type: string
-      # front_tag: 
-      #   description: 'Frontend image tag'
-      #   type: string 
-      #   required: false
-      #   default: 'latest'
-      # back_tag: 
-      #   description: 'Backend image tag'
-      #   type: string 
-      #   required: 
 jobs:
   test_inputs:
     runs-on: ubuntu-latest
@@ -81,6 +53,7 @@ jobs:
         working-directory: ./python 
         run: |
           python3 main.py '${{ inputs.local_tf }}' '${{ inputs.env-content}}'
+          cat .env
       - name: Check if backend is present  
         run: echo "is_present=$(gcloud run services list | grep ${{ env.reponame }}-${{ inputs.environment }} | wc -l)" >> $GITHUB_ENV 
       - name: Create Bucket for terraform backend
