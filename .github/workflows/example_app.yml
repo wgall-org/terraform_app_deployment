@@ -3,6 +3,14 @@ name: Deploy example app
 on: 
   workflow_dispatch:
     inputs:
+      local_tf:
+        description: 'locals.tf file content'
+        type: string
+        required: true
+      project-name: 
+        description: 'Name of project, same as Github Repository name'
+        type: string 
+        required: true
       environment:
         description: 'Deployment environment'
         required: true 
@@ -12,38 +20,40 @@ on:
           - dev 
           - stage 
           - prod
-      image: 
-        description: 'Project name'
-        type: string
-        required: true 
-        default: 'example_app'
-      projectid: 
-        description: 'GCP projectid'
-        type: string
-        required: true 
-        default: 'example_app'
-      region: 
-        description: 'GCP region'
-        required: true 
-        type: string
-      app_type: 
-        description: 'Type of application'
-        required: true
-        type: choice 
-        options:
-          - frontend
-          - backend
-      tag: 
-        description: 'Image tag'
-        type: string 
-        required: false
-        default: 'dev'
+      # front_image: 
+      #   description: 'Frontend image name'
+      #   type: string
+      #   required: true 
+      #   default: 'example_app'
+      # back_image:
+      #   description: 'Backend image name'
+      #   type: string
+      #   required: true
+      
+      # projectid: 
+      #   description: 'GCP projectid'
+      #   type: string
+      #   required: true 
+      #   default: 'example_app'
+      # region: 
+      #   description: 'GCP region'
+      #   required: true 
+      #   type: string
+      # front_tag: 
+      #   description: 'Frontend image tag'
+      #   type: string 
+      #   required: false
+      #   default: 'latest'
+      # back_tag: 
+      #   description: 'Backend image tag'
+      #   type: string 
+      #   required: 
 jobs:
   test_inputs:
     runs-on: ubuntu-latest
     steps:
       - name: Correct project name
-        run: echo "reponame=$(echo ${{ inputs.image }} | tr _ - )" >> $GITHUB_ENV
+        run: echo "reponame=$(echo ${{ inputs.project-name }} | tr _ - )" >> $GITHUB_ENV
       - uses: actions/checkout@v3 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -59,43 +69,36 @@ jobs:
         with:
           project_id: ${{ env.projectid }}
           export_default_credentials: true 
-      - uses: dawidd6/action-ansible-playbook@v2
-        with:
-          playbook: ./${{ inputs.image }}/ansible/main.yml
-          options: |
-            -e project=${{ env.reponame }}-${{ inputs.tag }}
-            -e region=${{ inputs.region }}
-            -e tag=${{ inputs.tag }}
-            -e projectid=${{ inputs.projectid }}
-            -e app_type=${{ inputs.app_type }}
-            -e env=${{ inputs.environment }}
-            -e image=${{ inputs.image }}
-      - working-directory: example_app/ansible
-        run: | 
-          echo "${{ secrets.VM_KEY }}" > inventory/key
-          chmod 600 inventory/key
+      # - uses: dawidd6/action-ansible-playbook@v2
+      #   with:
+      #     playbook: ./${{ inputs.image }}/ansible/main.yml
+      #     options: |
+      #       -e project=${{ env.reponame }}-${{ inputs.tag }}
+      #       -e region=${{ inputs.region }}
+      #       -e tag=${{ inputs.tag }}
+      #       -e projectid=${{ inputs.projectid }}
+      #       -e env=${{ inputs.environment }}
+      #       -e image=${{ inputs.image }}
+      # - working-directory: example_app/ansible
+      #   run: | 
+      #     echo "${{ secrets.VM_KEY }}" > inventory/key
+      #     chmod 600 inventory/key
       - name: Check if backend is present  
         run: echo "is_present=$(gcloud run services list | grep ${{ env.reponame }}-stage | wc -l)" >> $GITHUB_ENV 
-      - name: Create Bucket for terraform backend 
-        working-directory: ./backend-storage 
+      - name: Create Bucket for terraform backend
+        working-directory: ./backend-storage
         run: |
-          sed -i "s/rgn/${{ inputs.region }}/" locals.tf
-          sed -i "s/pid/${{ inputs.projectid }}/" locals.tf
-          sed -i "s/pjt/${{ env.reponame }}-${{ inputs.tag }}/" locals.tf
+          echo '${{ inputs.local_tf }}' > locals.tf
           terraform init 
           terraform apply --auto-approve
       - name: Deploy frontend part of application 
-        if: ${{ inputs.app_type == 'frontend'  }}
-        working-directory: ${{inputs.image }}/terraform/${{ inputs.environment }}/frontend
+        working-directory: ${{inputs.project-name }}/terraform/${{ inputs.environment }}
         run: | 
           export ANSIBLE_HOST_KEY_CHECKING=False
+          echo '${{ inputs.local_tf }}' > locals.tf
           sed -i "s/storage/${{ env.reponame }}-${{ inputs.tag }}/" main.tf
           terraform init -force-copy
           terraform apply --auto-approve
-      - name: Deploy Backend part of application 
-        if: ${{ inputs.app_type == 'backend'  }}
-        working-directory: ${{inputs.image }}
-        run: | 
-          export ANSIBLE_HOST_KEY_CHECKING=False
-          terraform init -force-copy
+
+
      
