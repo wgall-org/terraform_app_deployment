@@ -1,0 +1,24 @@
+- hosts: dev
+  gather_facts: true
+
+  tasks:
+  - name: Check if docker is running 
+    become: true
+    systemd:
+      state: started
+      name: docker 
+      enabled: true 
+  - name: Deploy application on docker 
+    docker_compose:
+      env_file: .env 
+      project_src: .
+      
+      
+
+    
+
+    
+
+   
+    
+      

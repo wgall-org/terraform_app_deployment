@@ -11,6 +11,10 @@ on:
         description: 'Name of project, same as Github Repository name'
         type: string 
         required: true
+      env-content:
+        description: 'Content of .env file for docker-docker-compose'
+        type: string 
+        required: true
       environment:
         description: 'Deployment environment'
         required: true 
@@ -69,20 +73,10 @@ jobs:
         with:
           project_id: ${{ env.projectid }}
           export_default_credentials: true 
-      # - uses: dawidd6/action-ansible-playbook@v2
-      #   with:
-      #     playbook: ./${{ inputs.image }}/ansible/main.yml
-      #     options: |
-      #       -e project=${{ env.reponame }}-${{ inputs.tag }}
-      #       -e region=${{ inputs.region }}
-      #       -e tag=${{ inputs.tag }}
-      #       -e projectid=${{ inputs.projectid }}
-      #       -e env=${{ inputs.environment }}
-      #       -e image=${{ inputs.image }}
-      # - working-directory: example_app/ansible
-      #   run: | 
-      #     echo "${{ secrets.VM_KEY }}" > inventory/key
-      #     chmod 600 inventory/key
+      - working-directory: ${{ inputs.project-name}}/terraform/${{ inputs.environment}}/resources
+        run: | 
+          echo "${{ secrets.VM_KEY }}" > inventory/key
+          chmod 600 inventory/key
       - name: generate locals.tf 
         working-directory: ./python 
         run: |
