@@ -90,6 +90,7 @@ jobs:
       - name: Check if backend is present  
         run: echo "is_present=$(gcloud run services list | grep ${{ env.reponame }}-${{ inputs.environment }} | wc -l)" >> $GITHUB_ENV 
       - name: Create Bucket for terraform backend
+        if: ${{ env.is_present == '0'}}
         working-directory: ./backend
         run: |
           cp ../python/locals.tf .
