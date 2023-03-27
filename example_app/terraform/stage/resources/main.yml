@@ -1,0 +1,34 @@
+- hosts: dev
+  gather_facts: true
+
+  tasks:
+  - name: Check if docker is running 
+    become: true
+    systemd:
+      state: started
+      name: docker 
+      enabled: true
+  - name: Create project directory
+    shell: mkdir {{ project }}
+    ignore_errors: true
+  - name: Copy resources to directory
+    copy:
+      src: "./{{ item }}"
+      dest: "{{ project }}/{{ item }}"
+    with_items:
+      - docker-compose.yml
+      - .env
+  - name: Deploy application on docker 
+    community.docker.docker_compose:
+      project_src: "{{ project }}"
+  
+      
+      
+
+    
+
+    
+
+   
+    
+      
