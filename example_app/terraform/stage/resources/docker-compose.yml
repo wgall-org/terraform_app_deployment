@@ -1,25 +1,9 @@
 version: '3.3'
 
 services:
-  mariadb:
-    image: wodby/mariadb:latest
-    container_name: mariadb-${PROJECT}
-    ports:
-      - 3306:3306
-    environment:
-      - MYSQL_USER   
-  php:
+  nextjs:
     image: ${IMAGE}:${TAG}
-    container_name: mariadb-${PROJECT}
+    container_name: node-${PROJECT}
     ports:
-      - 9000:9000
-    volumes:
-      - ${PROJECT}:/var/www/html/
-  nginx: 
-    image: wodby/ngix:latest 
-    container_name: nginx-${PROJECT}
-    ports: 
-      - 443:443
-      - 80:80
-    volumes: 
-      - ${PROJECT}:/var/www/html/
+      - 3000:3000
+
