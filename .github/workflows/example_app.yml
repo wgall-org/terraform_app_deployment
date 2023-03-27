@@ -83,24 +83,26 @@ jobs:
       #   run: | 
       #     echo "${{ secrets.VM_KEY }}" > inventory/key
       #     chmod 600 inventory/key
+      - name: generate locals.tf 
+        working-directory: ./python 
+        run: |
+          python3 main.py '${{ inputs.local_tf }}'
       - name: Check if backend is present  
-        run: echo "is_present=$(gcloud run services list | grep ${{ env.reponame }}-stage | wc -l)" >> $GITHUB_ENV 
+        run: echo "is_present=$(gcloud run services list | grep ${{ env.reponame }}-${{ inputs.environment }} | wc -l)" >> $GITHUB_ENV 
       - name: Create Bucket for terraform backend
         working-directory: ./backend-storage
         run: |
-          echo '${{ inputs.local_tf }}' >> locals.tf
-          echo } >> locals.tf
-          cat locals.tf
-      #     terraform init 
-      #     terraform apply --auto-approve
-      # - name: Deploy frontend part of application 
-      #   working-directory: ${{inputs.project-name }}/terraform/${{ inputs.environment }}
-      #   run: | 
-      #     export ANSIBLE_HOST_KEY_CHECKING=False
-      #     echo '${{ inputs.local_tf }}' > locals.tf
-      #     sed -i "s/storage/${{ env.reponame }}-${{ inputs.tag }}/" main.tf
-      #     terraform init -force-copy
-      #     terraform apply --auto-approve
+          cp ../python/locals.tf .
+          terraform init 
+          terraform apply --auto-approve
+      - name: Deploy frontend part of application 
+        working-directory: ${{inputs.project-name }}/terraform/${{ inputs.environment }}
+        run: | 
+          export ANSIBLE_HOST_KEY_CHECKING=False
+          cp ../../../python/locals.tf .
+          sed -i "s/storage/${{ env.reponame }}-${{ inputs.environment }}/" main.tf
+          terraform init -force-copy
+          terraform apply --auto-approve
 
 
      
