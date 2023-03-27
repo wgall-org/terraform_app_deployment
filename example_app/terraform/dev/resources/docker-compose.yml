@@ -4,6 +4,5 @@ services:
   nextjs:
     image: ${IMAGE}:${TAG}
     container_name: node-${PROJECT}
-    ports:
-      - 3000:3000
+    
 
