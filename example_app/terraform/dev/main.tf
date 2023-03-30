@@ -12,3 +12,9 @@ terraform {
   }
 }
 
+provider "google" {
+  project = local.projectid 
+  region = local.region 
+  credentials = local.creds
+}
+
