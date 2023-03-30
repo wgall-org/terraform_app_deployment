@@ -1,0 +1,3 @@
+locals {
+  creds = "../creds.json"
+}
